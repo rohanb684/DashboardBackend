@@ -55,3 +55,12 @@ export const addDummyProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateProductStocks = async (req, res) => {
+  try {
+    await Product.updateMany({}, { $set: { stock: 1000 } });
+    res.send("Stock Updated");
+  } catch (error) {
+    console.log(error);
+  }
+};

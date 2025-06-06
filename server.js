@@ -7,6 +7,7 @@ import errorHandler from "./middlewares/errorHandler.js";
 import authRouter from "./routes/auth.routes.js";
 import connectToDB from "./db/connectToDB.js";
 import productRouter from "./routes/product.routes.js";
+import orderRouter from "./routes/order.routes.js";
 
 const app = express();
 dotenv.config();
@@ -26,16 +27,10 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   console.log(`Incoming request: ${req.method} ${req.originalUrl}`);
-//   next();
-// });
 app.use("/api/v1/auth", authRouter);
-// app.use((req, res) => {
-//   console.log(`Route not handled: ${req.originalUrl}`);
-//   res.status(404).send("Custom 404 - Route not found");
-// });
+
 app.use("/api/v1/products", productRouter);
+app.use("/api/v1/order", orderRouter);
 
 app.get("/", (req, res) => {
   res.send("server working correctly");

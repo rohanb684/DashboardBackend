@@ -5,15 +5,21 @@ const orderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
 
     items: [
       {
-        product: {
+        productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true,
+        },
+        productName: {
+          type: String,
+          required: true,
+        },
+        productPrimaryImage: {
+          type: String,
         },
         quantity: {
           type: Number,
@@ -24,6 +30,8 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+        country: { type: String, required: true },
+        currency: { type: String, required: true },
       },
     ],
 
@@ -55,8 +63,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     paymentMethod: {
-      type: String, // e.g., "Razorpay", "Stripe", "COD"
-      required: true,
+      type: String,
     },
 
     paymentStatus: {
