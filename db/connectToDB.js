@@ -8,8 +8,8 @@ const connectToDB = async () => {
     if (process.env.NODE_ENV === "production") {
       await mongoose.connect(process.env.DB_URI);
     } else {
-      await mongoose.connect(process.env.DB_URI);
-      // await mongoose.connect("mongodb://localhost:27017/generalbackend");
+      // await mongoose.connect(process.env.DB_URI);
+      await mongoose.connect("mongodb://localhost:27017/generalbackend");
     }
     console.log("Connected to MongoDb");
   } catch (error) {

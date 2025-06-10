@@ -4,6 +4,7 @@ import Order from "../model/order.model.js";
 import Product from "../model/product.model.js";
 import sendResponse from "../utils/sendResponse.js";
 import { extractAndValidateAddress } from "../utils/addressValidation.js";
+import { getNextSequence } from "../utils/getNextSequence.js";
 
 // - currently this function does not add user._id in the model as this is for abaan which do not have login functionality.
 export const createNewOrder = async (req, res, next) => {
@@ -85,9 +86,13 @@ export const createNewOrder = async (req, res, next) => {
       await product.save({ session });
     }
 
+    const sequenceNumber = await getNextSequence("orderId");
+    const orderId = `ORD${String(sequenceNumber).padStart(5, "0")}`;
+
     const newOrder = await Order.create(
       [
         {
+          orderId,
           items: orderedProducts,
           shippingAddress: validatedShippingAddress,
           billingAddress: validatedBillingAddress || validatedShippingAddress,
@@ -105,6 +110,21 @@ export const createNewOrder = async (req, res, next) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    next(error);
+  }
+};
+
+export const getAllOrders = async (req, res, next) => {
+  try {
+    const allOrders = await Order.find();
+
+    sendResponse(
+      res,
+      200,
+      allOrders.length > 0 ? "Success" : "No Orders found",
+      allOrders
+    );
+  } catch (error) {
     next(error);
   }
 };

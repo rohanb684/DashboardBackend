@@ -33,10 +33,12 @@ const productSchema = new mongoose.Schema(
     prices: [countryPriceSchema], // ✅ Replaces price + priceCurrency
 
     // Optional Fields
-    description: {
-      type: String,
-      trim: true,
-    },
+    description: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     categories: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -121,6 +123,11 @@ const productSchema = new mongoose.Schema(
     },
     priceValidUntil: {
       type: Date,
+    },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive"],
+      default: "Active",
     },
   },
   {
