@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema(
       minlength: 1,
     },
 
-    prices: [countryPriceSchema], // ✅ Replaces price + priceCurrency
+    prices: [countryPriceSchema],
 
     // Optional Fields
     description: [

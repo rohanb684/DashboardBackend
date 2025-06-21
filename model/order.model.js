@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
 
+const orderAddressSchema = new mongoose.Schema(
+  {
+    fullName: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String },
+    addressLine1: { type: String, required: true },
+    addressLine2: { type: String },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    postalCode: { type: String, required: true },
+    country: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
     orderId: {
@@ -40,28 +55,8 @@ const orderSchema = new mongoose.Schema(
         currency: { type: String, required: true },
       },
     ],
-
-    shippingAddress: {
-      fullName: String,
-      phone: String,
-      addressLine1: String,
-      addressLine2: String,
-      city: String,
-      state: String,
-      postalCode: String,
-      country: String,
-    },
-
-    billingAddress: {
-      fullName: String,
-      phone: String,
-      addressLine1: String,
-      addressLine2: String,
-      city: String,
-      state: String,
-      postalCode: String,
-      country: String,
-    },
+    shippingAddress: orderAddressSchema,
+    billingAddress: orderAddressSchema,
 
     isBillingSameAsShipping: {
       type: Boolean,
@@ -90,8 +85,8 @@ const orderSchema = new mongoose.Schema(
     },
 
     shipment: {
-      carrier: String, // e.g., "Delhivery", "Bluedart"
-      trackingNumber: String, // Tracking ID from 3rd party
+      carrier: String,
+      trackingNumber: String,
       shippedAt: Date,
       estimatedDelivery: Date,
       deliveredAt: Date,

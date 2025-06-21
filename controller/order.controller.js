@@ -5,6 +5,7 @@ import Product from "../model/product.model.js";
 import sendResponse from "../utils/sendResponse.js";
 import { extractAndValidateAddress } from "../utils/addressValidation.js";
 import { getNextSequence } from "../utils/getNextSequence.js";
+import { updateAddressSchema } from "../validators/orderAddress.schema.js";
 
 // - currently this function does not add user._id in the model as this is for abaan which do not have login functionality.
 export const createNewOrder = async (req, res, next) => {
@@ -125,6 +126,67 @@ export const getAllOrders = async (req, res, next) => {
       allOrders
     );
   } catch (error) {
+    next(error);
+  }
+};
+
+export const getOrderById = async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId;
+
+    if (!orderId) {
+      throw new CustomError("Order Id is required", 400);
+    }
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      throw new CustomError("Order not found", 404);
+    }
+
+    sendResponse(res, 200, "Success", order);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateOrderAddress = async (req, res, next) => {
+  console.log("updateOrderAddress ");
+
+  try {
+    const orderId = req.params.orderId;
+
+    if (!orderId) {
+      throw new CustomError("Order Id is required", 400);
+    }
+
+    const parsedData = updateAddressSchema.parse(req.body);
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      throw new CustomError("Order not found", 404);
+    }
+
+    order.shippingAddress = parsedData.shippingAddress;
+    order.billingAddress = parsedData.billingAddress;
+    order.isBillingSameAsShipping = parsedData.isBillingSameAsShipping;
+
+    await order.save();
+
+    sendResponse(res, 200, "Address Updated", order);
+  } catch (error) {
+    console.log(error);
+
+    if (error.name === "ZodError") {
+      return res.status(400).json({
+        success: false,
+        message: "Validation error",
+        errors: error.errors.map((e) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
+      });
+    }
+
     next(error);
   }
 };
