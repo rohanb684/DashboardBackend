@@ -24,6 +24,7 @@ app.use(
       "http://localhost:5175",
       "https://abaan-new.vercel.app",
       "https://snazzy-macaron-98dc05.netlify.app",
+      "https://abaandelights.com",
     ],
     credentials: true,
   })
