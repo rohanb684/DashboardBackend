@@ -19,12 +19,10 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     origin: [
-      "http://localhost:5174",
-      "http://localhost:5173",
-      "http://localhost:5175",
       "https://abaan-new.vercel.app",
       "https://snazzy-macaron-98dc05.netlify.app",
       "https://www.abaandelights.com",
+      "https://www.abaanchocolate.com",
     ],
     credentials: true,
   })
